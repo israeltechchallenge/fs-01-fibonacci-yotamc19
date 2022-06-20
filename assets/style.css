@@ -1,0 +1,38 @@
+:root {
+    --red: #D9534F;
+}
+
+body {
+    margin: 0 10%;
+    font-family: 'Open Sans';
+}
+
+h1 {
+    font-size: 300%;
+}
+
+.red-input {
+    color: var(--red);
+    border: 1px solid var(--red);
+}
+
+.red-alert {
+    background-color: #F2DEDE;
+    color: #A94442;
+    border-radius: 4px;
+    padding: 4px;
+    position: absolute;
+    right: 0;
+}
+
+.red-result {
+    color: var(--red);
+    font-weight: 400 !important;
+    text-decoration: none !important;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 8vw;
+    }
+}
