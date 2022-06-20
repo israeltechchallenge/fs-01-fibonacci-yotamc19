@@ -1,5 +1,6 @@
-var x = document.getElementById(`xNum`);
-var y = document.getElementById(`yNum`);
+const input = document.getElementById(`xNum`);
+const result = document.getElementById(`yNum`);
+const isBtn = document.querySelector(`.btn`);
 
 const getFibonacciNum = (x) => {
     const arr = [1, 1];
@@ -8,5 +9,11 @@ const getFibonacciNum = (x) => {
     return arr[x - 1];
 }
 
-x.innerText = 8;
-y.innerText = getFibonacciNum(x.innerText);
+const  btnClicked = () => {
+    const x = input.value;
+    if (x == null || x < 1)
+        return;
+    result.innerText = getFibonacciNum(x);
+}
+
+isBtn.addEventListener(`click`, btnClicked);
