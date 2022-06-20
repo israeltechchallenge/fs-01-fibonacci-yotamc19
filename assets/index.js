@@ -1,12 +1,14 @@
-var x = document.getElementById(`xNum`);
-var y = document.getElementById(`yNum`);
+const input = document.getElementById(`xNum`);
+const result = document.getElementById(`yNum`);
+const isBtn = document.querySelector(`.btn`);
 
-const getFibonacciNum = (x) => {
-    const arr = [1, 1];
-    while (x > arr.length)
-        arr.push(arr[arr.length - 2] + arr[arr.length - 1]);
-    return arr[x - 1];
+function btnClicked() {
+    const x = input.value;
+    fetch(`http://localhost:5050/fibonacci/${x}`)
+        .then(Response => Response.json())
+        .then(data => {
+            result.innerText = data.result;
+        })
 }
 
-x.innerText = 8;
-y.innerText = getFibonacciNum(x.innerText);
+isBtn.addEventListener(`click`, btnClicked);
