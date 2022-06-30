@@ -35,10 +35,11 @@ const addRow = (data) => {
 const handleClick = async () => {
     reset();
     const x = input.value;
-    if (saveCalc.checked)
-        serverCalc(x);
-    else
-        localCalc(x);
+    if (x > 50) appendAlert(); //no call for calculation
+    else {
+        if (saveCalc.checked) serverCalc(x);
+        else localCalc(x);
+    }
 }
 
 //function that runs a server through calc
@@ -53,11 +54,8 @@ const serverCalc = async (x) => {
         result.innerText = data.result;
         addRow(data);
     } catch (err) {
-        if (x == 42) {
-            result.innerText = err.message;
-            result.classList.add(`red-result`);
-        } else
-            appendAlert();
+        result.innerText = err.message;
+        result.classList.add(`red-result`);
     }
     main.removeChild(spinner1);
     resultsHeader.removeChild(spinner2);
