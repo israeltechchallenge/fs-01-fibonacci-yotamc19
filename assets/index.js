@@ -34,24 +34,24 @@ const addRow = (data) => {
 const handleClicked = async () => {
     reset();
     const x = input.value;
-    main.append(spinner1);
-    resultsHeader.append(spinner2);
-    try {
-        res = await fetch(`http://localhost:5050/fibonacci/${x}`);
-        if (!res.ok)
-            throw new Error(await res.text());
-        data = await res.json();
-        result.innerText = data.result;
-        addRow(data);
-    } catch (err) {
-        if (x == 42) {
+    if (x > 50) appendAlert(); //no call for the server
+    else {
+        main.append(spinner1);
+        resultsHeader.append(spinner2);
+        try {
+            res = await fetch(`http://localhost:5050/fibonacci/${x}`);
+            if (!res.ok)
+                throw new Error(await res.text());
+            data = await res.json();
+            result.innerText = data.result;
+            addRow(data);
+        } catch (err) {
             result.innerText = err.message;
             result.classList.add(`red-result`);
-        } else
-            appendAlert();
+        }
+        main.removeChild(spinner1);
+        resultsHeader.removeChild(spinner2);
     }
-    main.removeChild(spinner1);
-    resultsHeader.removeChild(spinner2);
 }
 
 //function to create and append alert for number bigger than 50
