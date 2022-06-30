@@ -13,6 +13,7 @@ const resultsHeader = document.querySelector(`.results-header`);
 let list = document.createElement(`div`);
 const resultsList = document.querySelector(`.results-list`);
 const sortBy = document.querySelector(`ul`);
+let currentListAsArray = [];
 
 //function to get entire list of results on page load
 const getFibonacciResults = async () => {
@@ -36,14 +37,18 @@ const addRow = (data) => {
     row.classList.add(`result-row`);
     row.innerHTML = `The Fibonacci Of <b>${data.number}</b> is <b>${data.result}</b>. Calculated at: ${new Date(data.createdDate)}`;
     list.append(row);
+    currentListAsArray.push(data); //updates currentListAsArray do there won't be any need to get data from the server when sorting
 }
 
 //function that will run on every isBtn click
 const handleClick = async () => {
     reset();
     const x = input.value;
-    if (saveCalc.checked) serverCalc(x);
-    else localCalc(x);
+    if (x > 50) appendAlert(); //no call for calculation
+    else {
+        if (saveCalc.checked) serverCalc(x);
+        else localCalc(x);
+    }
 }
 
 //function that runs a server through calc
@@ -56,10 +61,8 @@ const serverCalc = async (x) => {
         result.innerText = data.result;
         addRow(data);
     } catch (err) {
-        if (x == 42) {
-            result.innerText = `Server Error: 42 is the meaning of life`;
-            result.classList.add(`red-result`);
-        } else appendAlert();
+        result.innerText = `Server Error: 42 is the meaning of life`;
+        result.classList.add(`red-result`);
     }
     main.removeChild(spinner1);
     resultsHeader.removeChild(spinner2);
@@ -99,15 +102,16 @@ const reset = () => {
 
 //function that sorts the results list
 const sortList = async (e) => {
-    resultsHeader.append(spinner2);
     deleteAllRows();
-    const data = await getCurrentList();
+    const data = currentListAsArray;
+    const len = currentListAsArray.length;
     if (e.target.innerText === `Number Asc`) data.sort((a, b) => { return a.number - b.number; });
     else if (e.target.innerText === `Number Desc`) data.sort((a, b) => { return b.number - a.number; });
     else if (e.target.innerText === `Date Asc`) data.sort((a, b) => { return Number(a.createdDate) - Number(b.createdDate); });
     else data.sort((a, b) => { return Number(b.createdDate) - Number(a.createdDate); });
     data.forEach(item => addRow(item));
-    resultsHeader.removeChild(spinner2);
+    for (let i = 0; i < len; i++)
+        currentListAsArray.shift(); //deletes all the first group of items in the array
 }
 
 //function which deletes all current elements inside the results list
