@@ -11,21 +11,21 @@ spinner.classList.add(`spinner-border`);
 const handleClick = async () => {
     reset(); //resets values
     const x = input.value;
-    root.append(spinner);
-    try {
-        res = await fetch(`http://localhost:5050/fibonacci/${x}`);
-        if(!res.ok) 
-            throw new Error(await res.text());
-        data = await res.json();
-        result.innerText = data.result;
-    } catch (err) {
-        if (x == 42) {
+    if (x > 50) createAlert(); //no call for the server
+    else {
+        root.append(spinner);
+        try {
+            res = await fetch(`http://localhost:5050/fibonacci/${x}`);
+            if (!res.ok)
+                throw new Error(await res.text());
+            data = await res.json();
+            result.innerText = data.result;
+        } catch (err) {
             result.innerText = err.message;
             result.classList.add(`red-result`);
-        } else
-            createAlert();
+        }
+        root.removeChild(spinner);
     }
-    root.removeChild(spinner);
 }
 
 //function to create and append alert for number bigger than 50
@@ -47,7 +47,7 @@ const reset = () => {
         inputSection.removeChild(inputSection.lastChild);
 }
 
-input.addEventListener(`click`, function() {
+input.addEventListener(`click`, function () {
     isBtn.disabled = false;
 });
 isBtn.addEventListener(`click`, handleClick);
